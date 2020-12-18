@@ -10,4 +10,4 @@ Most recent entry at the bottom.
 Each entry should begin with the following format: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
 
 williamY -- 2020-12-17 21:23
-Dreated design document.
+Created design document.
