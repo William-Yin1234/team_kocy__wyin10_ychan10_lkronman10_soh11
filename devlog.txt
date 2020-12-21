@@ -11,3 +11,5 @@ Each entry should begin with the following format: firstL -- TIMESTAMP\n ( e.g.:
 
 williamY -- 2020-12-17 21:23
 Created design document.
+williamY -- 2020-12-21 17:00
+Created design document for blog project.
