@@ -1,3 +1,9 @@
+Team KOCY -- William Yin, Jason Chan, Liam Kronman, Stella Oh
+SoftDev
+P0 -- Da Art of Storytellin’ (Pt. 2)
+2020-12-22
+
+
 DEVLOG (TEAM kocy)
 
 Instructions:
@@ -13,3 +19,5 @@ williamY -- 2020-12-17 21:23
 Created design document.
 williamY -- 2020-12-21 17:00
 Created design document for blog project.
+williamY -- 2020-12-17 10:04
+Updated design document and set up folder structure.
