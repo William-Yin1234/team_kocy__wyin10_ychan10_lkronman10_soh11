@@ -21,3 +21,8 @@ williamY -- 2020-12-21 17:00
 Created design document for blog project.
 williamY -- 2020-12-17 10:04
 Updated design document and set up folder structure.
+williamY -- 2021-01-04 9:50
+-- Created timeline
+-- Made flow of data more clear
+-- Created database tables
+-- Received constructive feedback
