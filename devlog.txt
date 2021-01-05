@@ -3,26 +3,44 @@ SoftDev
 P0 -- Da Art of Storytellin’ (Pt. 2)
 2020-12-22
 
-
-DEVLOG (TEAM kocy)
+DEVLOG (TEAM KOCY)
 
 Instructions:
 Devlog allows any group member at any time to see the current state of the project.
 PM will make sure devlog is being maintained, but will not make all entries.
 The devlog should be a plain text file, stored in the specified location.
-When any team member stops working and pushes changes to github, they should update the devlog explaining what changes have been made. Include errors/bugs discovered (or created).
+When any team member stops working and pushes changes to github,
+they should update the devlog explaining what changes have been made.
+Include errors/bugs discovered (or created).
 Separate devlog entries with a newline.
 Most recent entry at the bottom.
-Each entry should begin with the following format: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
+Each entry should begin with the following format:
+firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
 
 williamY -- 2020-12-17 21:23
 Created design document.
+================================================================================
 williamY -- 2020-12-21 17:00
 Created design document for blog project.
+================================================================================
 williamY -- 2020-12-17 10:04
 Updated design document and set up folder structure.
+================================================================================
 williamY -- 2021-01-04 9:50
 -- Created timeline
 -- Made flow of data more clear
 -- Created database tables
 -- Received constructive feedback
+================================================================================
+stellaO -- 2021-01-05 2:00
+* added templates for login/logout pages
+* added template for error page
+* added template for home page
+* encountered ".TemplateNotFound" error and fixed the issue
+* fixed repo structure
+* need to discuss with teammates how to create new user logins
+* edited templates
+* edited README.md
+* updated all headings in docs so far
+* need to ask teammates about requirements.txt
+================================================================================

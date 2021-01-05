@@ -1,4 +1,4 @@
-# Team Kocy's Repo for the Animated Octo Telegram Project
+# animated-octo-telegram by Team Kocy
 
 ### Team Roster:
 * Project Manager: William Yin (wyin10)
@@ -10,4 +10,6 @@
 * Update their blog by adding a new entry
 * View and edit their own past entries
 * View the blogs of other users
-
+### Launch codes:
+* How to clone/install
+* How to return

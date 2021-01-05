@@ -1,0 +1,12 @@
+Team KOCY -- William Yin, Jason Chan, Liam Kronman, Stella Oh
+SoftDev
+P0 -- Da Art of Storytellin’ (Pt. 2)
+2021-01-05
+
+- it will list flas as well as any other pip installs your app requirement
+- latest version of all packages
+- reminder: you must seek clearance any modules/libraries not explicitly
+  covered in class
+
+Required pip installs:
+- Flask
