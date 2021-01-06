@@ -12,10 +12,10 @@
 * View the blogs of other users
 ### Launch codes:
 * Clone team_kocy__wyin10__ychan10_lkronman10_soh11:
-  clone git@git@github.com:William-Yin1234/team_kocy__wyin10_ychan10_lkronman10_soh11.git
+  'git clone https://github.com/William-Yin1234/team_kocy__wyin10_ychan10_lkronman10_soh11.git'
 * Install the modules listed in the requirements.txt file:
-  pip install -r requirements.txt
+  'pip install -r requirements.txt'
 * Move into app directory:
-  cd app
+  'cd app'
 * Run:
-  python2 _init_.py
+  'python3 _init_.py'
