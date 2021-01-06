@@ -12,5 +12,5 @@
 * View the blogs of other users
 ### Launch codes:
 * Clone team_kocy__wyin10__ychan10_lkronman10_soh11:
-  clone git@
+  clone git@git@github.com:William-Yin1234/team_kocy__wyin10_ychan10_lkronman10_soh11.git
 * How to return
