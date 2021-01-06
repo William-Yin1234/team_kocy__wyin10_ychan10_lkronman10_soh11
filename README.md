@@ -11,5 +11,6 @@
 * View and edit their own past entries
 * View the blogs of other users
 ### Launch codes:
-* How to clone/install
+* Clone team_kocy__wyin10__ychan10_lkronman10_soh11:
+  clone git@
 * How to return
