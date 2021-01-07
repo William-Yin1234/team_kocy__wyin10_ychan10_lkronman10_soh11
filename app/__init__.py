@@ -9,11 +9,18 @@ from flask import request           #facilitate form submission
 from flask import session
 import os
 import sqlite3
+from datetime import date
+
+today = date.today()
 
 DB_FILE="discobandit.db"
 
 db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+# Used to create initial tables
+#c.execute("CREATE TABLE Users(id INTEGER PRIMARY KEY, username TEXT, password TEXT)")
+#c.execute("CREATE TABLE Entries(id INTEGER PRIMARY KEY, author INTEGER, context TEXT, date TEXT)")
 
 users = []
 entries = []
@@ -27,6 +34,8 @@ entries = c.fetchall()
 
 USERNAME = "username" #needed?
 PASSWORD = "1234"
+
+
 
 #the conventional way:
 #from flask import Flask, render_template, request
@@ -60,6 +69,9 @@ def disp_loginpage():
             error += " password"
         return render_template("error.html", error=error)
 
+@app.route("/homepage", methods=["POST"])
+def homepage():
+    return render_template("homepage.html", username=session.get("username"))
 
 # Only allow this route to be reached with post.
 @app.route("/logout", methods=["POST"])
@@ -67,7 +79,6 @@ def logout():
     # Remove username key from session dict.
     session.pop("username")
     return render_template("loggedOut.html")
-
 
 @app.route("/own")
 def disp_own():
@@ -80,7 +91,7 @@ def disp_own():
     for row in entries:
         if row[0] == iden:
             text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
-    return("ownBlog.html", entry = text)
+    return render_template("ownBlog.html", entry=text)
 
 @app.route("/other")
 def disp_others():
@@ -93,11 +104,16 @@ def disp_others():
     for row in entries:
         if row[0] == iden:
             text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
-    return("otherBlog.html", author = u, entry = text)
+    return render_template("otherBlog.html", author=u, entry=text)
 
+@app.route("/newentry", methods=["POST"])
+def new_entry():
+    return render_template("newEntry.html")
 
-
-
+@app.route("/addentry")
+def add_entry():
+    c.execute("INSERT INTO Entries VALUES(session.get('id'), session.get('username'), request.form['addEntry'], date)")
+    return disp_own()
 
 if __name__ == "__main__": #false if this file imported as module
     #enable debugging, auto-restarting of server when this file is modified

@@ -19,18 +19,17 @@ P0: Da Art of Storytellin' (Pt.2)
 
   <body>
     <h1>
-      Welcome {{ username }}.
+      Create a new post!
     </h1>
 
-    <h2>Team KOCY -- William Yin, Liam Kronman, Jason Chan, Stella Oh</h2>
-
     <form action="/own" method="get">
-        <input type="submit" value="Create a Blog">
+        <input type="submit" value="Go Back">
+    </form><br>
+    <form action="/addentry" method="get">
+        <input type="textarea" id="addEntry"><br><br>
+        <input type="submit" value="Submit">
     </form>
-    <br><br>
-    <form action="/logout" method="post">
-        <input type="submit" value="Logout">
-    </form>
+
   </body>
 
 </html>
