@@ -18,4 +18,4 @@
 * Move into app directory:
   `cd app`
 * Run:
-  `python3 _init_.py`
+  `python3 __init__.py`
