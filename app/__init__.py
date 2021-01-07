@@ -69,6 +69,7 @@ def disp_loginpage():
             error += " password"
         return render_template("error.html", error=error)
 
+# must be fixed to retain username
 @app.route("/homepage", methods=["POST"])
 def homepage():
     return render_template("homepage.html", username=session.get("username"))
@@ -114,6 +115,10 @@ def new_entry():
 def add_entry():
     c.execute("INSERT INTO Entries VALUES(session.get('id'), session.get('username'), request.form['addEntry'], date)")
     return disp_own()
+
+@app.route("/editentry", methods=["POST"])
+def edit_entry():
+    return render_template("editEntry.html")
 
 if __name__ == "__main__": #false if this file imported as module
     #enable debugging, auto-restarting of server when this file is modified
