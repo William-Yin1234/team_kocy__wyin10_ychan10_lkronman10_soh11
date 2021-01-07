@@ -44,3 +44,9 @@ stellaO -- 2021-01-05 2:00
 * updated all headings in docs so far
 * need to ask teammates about requirements.txt
 ================================================================================
+jasonC -- 2021-01-05 9:35
+* added what html files for viewing own blog and others
+* need to fill in routes once those routes are created
+* added a way to query data from database tables in python file
+* need to changed database name if its not named discobandit.db
+================================================================================

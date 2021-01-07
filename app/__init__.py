@@ -8,9 +8,24 @@ from flask import render_template   #facilitate jinja templating
 from flask import request           #facilitate form submission
 from flask import session
 import os
+import sqlite3
+
+DB_FILE="discobandit.db"
+
+db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+users = []
+entries = []
+
+c.execute("SELECT * FROM Users")
+users = c.fetchall()
+
+c.execute("SELECT * FROM Entries")
+entries = c.fetchall()
 
 
-USERNAME = "username"
+USERNAME = "username" #needed?
 PASSWORD = "1234"
 
 #the conventional way:
@@ -52,6 +67,35 @@ def logout():
     # Remove username key from session dict.
     session.pop("username")
     return render_template("loggedOut.html")
+
+
+@app.route("/own")
+def disp_own():
+    u = session.get("username")
+    iden = -1
+    text = ""
+    for row in users:
+        if row[1] == u:
+            iden = row[0]
+    for row in entries:
+        if row[0] == iden:
+            text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
+    return("ownBlog.html", entry = text)
+
+@app.route("/other")
+def disp_others():
+    u = request.form.get("username")
+    iden = -1
+    text = ""
+    for row in users:
+        if row[1] == u:
+            iden = row[0]
+    for row in entries:
+        if row[0] == iden:
+            text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
+    return("otherBlog.html", author = u, entry = text)
+
+
 
 
 

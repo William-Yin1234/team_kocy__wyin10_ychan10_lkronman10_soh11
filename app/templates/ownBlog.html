@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+     simple demo of HTML forms via Flask
+-->
+
+<html>
+
+  <head>
+    <title> Your Blog </title>
+  </head>
+
+  <body>
+    <h1>
+      Welcome to your blog!
+    </h1>
+
+    <form action="FILL IN HOME PAGE FLASK ROUTE" method="post">
+        <input type="submit" value="Home">
+    </form>
+
+    <form action="FILL IN CREATE NEW ENTRY FLASK ROUTE" method="post">
+        <input type="submit" value="Create New Entry">
+    </form>
+
+    <p>Most Recent Entry: <br />
+      {{ entry }}
+    </p>
+
+    <form action="FILL IN EDIT ENTRY FLASK ROUTE" method="post">
+        <input type="submit" value="Edit Entry">
+    </form>
+
+  </body>
+
+</html>
