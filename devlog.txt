@@ -36,6 +36,7 @@ stellaO -- 2021-01-05 2:00
 * added templates for login/logout pages
 * added template for error page
 * added template for home page
+* created __init__.py and added code for login/logout
 * encountered ".TemplateNotFound" error and fixed the issue
 * fixed repo structure
 * need to discuss with teammates how to create new user logins
