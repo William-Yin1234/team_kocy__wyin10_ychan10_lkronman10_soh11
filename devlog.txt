@@ -50,3 +50,9 @@ jasonC -- 2021-01-05 9:35
 * added a way to query data from database tables in python file
 * need to changed database name if its not named discobandit.db
 ================================================================================
+liamK -- 2021-01-07 1:53
+* linked all existing pages properly
+* fixed database and syntax for accessing it
+* made template for create new page
+* need to fix insertion of new entries
+* need to add page for fixing previous entries
