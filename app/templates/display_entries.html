@@ -1,0 +1,12 @@
+{% extends "login_required.html" %}
+{% block content %}
+    {% for entry in entries %}
+        <h3>{{ entry["title"] }}</h3>
+        <p>{{ entry["body"] }}</p>
+        <p><small>Posted by {{ entry["author"] }} at {{ entry["date"] }}</small></p>
+        {% if entry["author_id"] == session.get("user_id") %}
+            <p><a href={{ url_for("edit_entry", entry_id=entry["id"]) }}><small>Edit</small></a></p>
+            <p><a href={{ url_for("delete_entry", entry_id=entry["id"]) }}><small>Delete</small></a></p>
+        {% endif %}
+    {% endfor %}
+{% endblock content %}

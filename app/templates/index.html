@@ -1,0 +1,9 @@
+{% extends "login_required.html" %}
+{% block content %}
+    <h2>Welcome {{ username }}!</h2>
+    {% for entry in entries %}
+        <h3>{{ entry["title"] }}</h3>
+        <p>{{ entry["body"] }}</p>
+        <p><small>Posted by <a href={{ url_for("display_user_entries", user_id=entry["author_id"]) }}>{{ entry["author"] }}</a> at {{ entry["date"] }}</small></p>
+    {% endfor %}
+{% endblock content %}

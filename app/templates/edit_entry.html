@@ -1,0 +1,8 @@
+{% extends "login_required.html" %}
+{% block content %}
+    <form action={{ url_for("edit_entry", entry_id=id) }} method="post">
+        <input type="text" name="title" value={{ title }}><br>
+        <textarea name="body" rows="10" cols="100">{{ body }}</textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+{% endblock content %}

@@ -3,124 +3,179 @@
 # P0: Da Art of Storytellin' (Pt.2)
 # 2021-01-05
 
-from flask import Flask             #facilitate flask webserving
-from flask import render_template   #facilitate jinja templating
-from flask import request           #facilitate form submission
-from flask import session
+
+from flask import Flask, render_template, request, session, url_for, redirect, abort
+from flask_bcrypt import Bcrypt
+import bcrypt
 import os
+import time
 import sqlite3
-from datetime import date
-
-today = date.today()
-
-DB_FILE="discobandit.db"
-
-db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-
-# Used to create initial tables
-#c.execute("CREATE TABLE Users(id INTEGER PRIMARY KEY, username TEXT, password TEXT)")
-#c.execute("CREATE TABLE Entries(id INTEGER PRIMARY KEY, author INTEGER, context TEXT, date TEXT)")
-
-users = []
-entries = []
-
-c.execute("SELECT * FROM Users")
-users = c.fetchall()
-
-c.execute("SELECT * FROM Entries")
-entries = c.fetchall()
+import utils
 
 
-USERNAME = "username" #needed?
-PASSWORD = "1234"
-
-
-
-#the conventional way:
-#from flask import Flask, render_template, request
-
-app = Flask(__name__)    #create Flask object
+APP_NAME = "Kocy Blog"
+app = Flask(APP_NAME)
+bcrypt = Bcrypt(app)
 app.secret_key = os.urandom(32)
+DB_FILE = "kocy_blog.db"
 
 
-@app.route("/", methods=['GET', 'POST'])
-def disp_loginpage():
+@app.route("/")
+@app.route("/index")
+def index():
 
-    # Two cases: user requests with GET, or user requests with POST
-    # If user requests with GET, render welcome.html if session contains username, or render login.html if it does not.
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
+
+    entries = utils.select_entries_by_author(DB_FILE, session.get("user_id"), True)
+
+    return render_template("index.html", username=session.get("username"), entries=entries)
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
     if request.method == "GET":
-        if session.get("username"):
-            return render_template("homepage.html", username=session.get("username"))
-        else:
-            return render_template('login.html')
+        return render_template("register.html")
 
-    # If user requests with POST, then they are sending form data that needs to be authenticated.
-    if request.form.get("username") == USERNAME and request.form.get("password") == PASSWORD:
-        # Save username to session
-        session["username"] = request.form.get("username")
-        return render_template("homepage.html", username=session.get("username"))
-    else:
-        # Render error
-        error = "Wrong"
-        if request.form.get("username") != USERNAME:
-            error += " username"
-        if request.form.get("password") != PASSWORD:
-            error += " password"
-        return render_template("error.html", error=error)
+    if not request.form.get("username") or not request.form.get("password") or not request.form.get("confirm password"):
+        return render_template("register.html", warning="Please fill out all fields.")
+    elif len(request.form.get("password")) < 4:
+        return render_template("register.html", warning="Password must be at least 4 characters long.")
+    elif request.form.get("password") != request.form.get("confirm password"):
+        return render_template("register.html", warning="Passwords do not match.")
 
-# must be fixed to retain username
-@app.route("/homepage", methods=["POST"])
-def homepage():
-    return render_template("homepage.html", username=session.get("username"))
+    db = sqlite3.connect(DB_FILE)
+    cursor = db.cursor()
+    cursor.execute("select * from users where username = ?", (request.form.get("username"),))
+    user = cursor.fetchone()
+    if user:
+        db.close()
+        return render_template("register.html", warning="Username is already taken.")
 
-# Only allow this route to be reached with post.
-@app.route("/logout", methods=["POST"])
+    password_hash = bcrypt.generate_password_hash(request.form.get("password"))
+    cursor.execute("insert into users (username, password) values (?, ?)", (request.form.get("username"), password_hash))
+    cursor.execute("select * from users where username = ?", (request.form.get("username"),))
+    user = cursor.fetchone()
+    db.commit()
+    db.close()
+
+    session["user_id"] = user[0]
+    session["username"] = user[1]
+    return redirect(url_for("index"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "GET":
+        if session.get("user_id"):
+            return redirect(url_for("index"))
+        return render_template("login.html")
+
+    if not request.form.get("username") or not request.form.get("password"):
+        return render_template("login.html", warning="Please fill out all fields.")
+
+    db = sqlite3.connect(DB_FILE)
+    cursor = db.cursor()
+    cursor.execute("select * from users where username = ?", (request.form.get("username"),))
+    user = cursor.fetchone()
+    db.close()
+    if not user or not bcrypt.check_password_hash(user[2], request.form.get("password")):
+        return render_template("login.html", warning="Incorrect username or password.")
+
+    session["user_id"] = user[0]
+    session["username"] = user[1]
+    return redirect(url_for("index"))
+
+
+@app.route("/logout")
 def logout():
-    # Remove username key from session dict.
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
+
+    session.pop("user_id")
     session.pop("username")
-    return render_template("loggedOut.html")
+    return redirect(url_for("login"))
 
-@app.route("/own")
-def disp_own():
-    u = session.get("username")
-    iden = -1
-    text = ""
-    for row in users:
-        if row[1] == u:
-            iden = row[0]
-    for row in entries:
-        if row[0] == iden:
-            text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
-    return render_template("ownBlog.html", entry=text)
 
-@app.route("/other")
-def disp_others():
-    u = request.form.get("username")
-    iden = -1
-    text = ""
-    for row in users:
-        if row[1] == u:
-            iden = row[0]
-    for row in entries:
-        if row[0] == iden:
-            text = "By " +  row[1] + "<br />" + row[3] + "<br />" + row[2]
-    return render_template("otherBlog.html", author=u, entry=text)
-
-@app.route("/newentry", methods=["POST"])
+@app.route("/new", methods=["GET", "POST"])
 def new_entry():
-    return render_template("newEntry.html")
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
 
-@app.route("/addentry")
-def add_entry():
-    c.execute("INSERT INTO Entries VALUES(session.get('id'), session.get('username'), request.form['addEntry'], date)")
-    return disp_own()
+    if request.method == "GET":
+        return render_template("new_entry.html")
 
-@app.route("/editentry", methods=["POST"])
-def edit_entry():
-    return render_template("editEntry.html")
+    if not request.form.get("title") or not request.form.get("body"):
+        return render_template("new_entry.html", warning="Please include a title and a body.")
 
-if __name__ == "__main__": #false if this file imported as module
-    #enable debugging, auto-restarting of server when this file is modified
+    db = sqlite3.connect(DB_FILE)
+    cursor = db.cursor()
+    cursor.execute("insert into entries (author_id, title, body, date) values (?, ?, ?, ?)",
+        (session.get("user_id"), request.form.get("title"), request.form.get("body"), int(time.time())))
+    db.commit()
+    db.close()
+    return redirect(url_for("index"))
+
+
+@app.route("/user/<int:user_id>")
+def display_user_entries(user_id):
+    if not session.get("user_id") or not session.get("username"):
+        return abort(403)
+
+    entries = utils.select_entries_by_author(DB_FILE, author_id=user_id)
+
+    return render_template("display_entries.html", entries=entries)
+
+
+@app.route("/entry/<int:entry_id>/edit", methods=["GET", "POST"])
+def edit_entry(entry_id):
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
+
+    results = utils.verify_user_owns_entry(DB_FILE, entry_id, session.get("user_id"))
+    if results[0] != 0:
+        abort(results[0])
+
+    entry = results[1]
+    if request.method == "GET":
+        title = entry[4]
+        body = entry[2]
+        return render_template("edit_entry.html", title=title, body=body, id=entry_id)
+
+    if not request.form.get("title") or not request.form.get("body"):
+        return render_template("edit_entry.html", warning="Please include a title and a body.")
+
+    db = sqlite3.connect(DB_FILE)
+    cursor = db.cursor()
+    cursor.execute("update entries set title = ?, body = ? where id = ?",
+        (request.form.get("title"), request.form.get("body"), entry_id))
+    db.commit()
+    db.close()
+
+    return redirect(url_for("display_user_entries", user_id=session.get("user_id")))
+
+
+@app.route("/entry/<int:entry_id>/delete")
+def delete_entry(entry_id):
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
+
+    results = utils.verify_user_owns_entry(DB_FILE, entry_id, session.get("user_id"))
+    if results[0] != 0:
+        abort(results[0])
+
+    db = sqlite3.connect(DB_FILE)
+    cursor = db.cursor()
+    cursor.execute("delete from entries where id = ?",
+        (entry_id,))
+    db.commit()
+    db.close()
+
+    return redirect(url_for("display_user_entries", user_id=session.get("user_id")))
+
+
+if __name__ == "__main__":
     app.debug = True
     app.run()

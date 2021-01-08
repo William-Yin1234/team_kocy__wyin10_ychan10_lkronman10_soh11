@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block outer_content %}
+    <a href={{ url_for("logout") }}>Logout</a>
+    <a href={{ url_for("index") }}>Home</a>
+    <a href={{ url_for("new_entry") }}>New Entry</a>
+    <a href={{ url_for("display_user_entries", user_id=session.get("user_id")) }}>My Entries</a>
+    {% block content %}{% endblock content %}
+{% endblock outer_content %}

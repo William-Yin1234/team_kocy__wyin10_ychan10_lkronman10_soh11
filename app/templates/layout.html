@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kocy Blog</title>
+</head>
+<body>
+    <h1>Kocy Blog</h1>
+    {% if warning %}
+        <p class="warning">{{ warning }}</p>
+    {% endif %}
+    {% block outer_content %}{% endblock outer_content %}
+</body>
