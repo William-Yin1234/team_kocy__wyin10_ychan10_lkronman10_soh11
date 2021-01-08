@@ -1,8 +1,5 @@
 {% extends "layout.html" %}
 {% block outer_content %}
-    {% if warning %}
-        <p class="warning">{{ warning }}</p>
-    {% endif %}
     <form action="/login" method="post">
         <p>Username</p>
         <input type="text" name="username">
